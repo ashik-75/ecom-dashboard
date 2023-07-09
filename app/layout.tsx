@@ -1,7 +1,7 @@
 import ModalProvider from "@/providers/modal-provider";
+import SessionProvider from "@/providers/session-provider";
 import ThemeProvider from "@/providers/theme-providers";
 import ToastProvider from "@/providers/toast-provider";
-import { ClerkProvider } from "@clerk/nextjs";
 import { Inter } from "next/font/google";
 import "./globals.css";
 
@@ -18,7 +18,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <ClerkProvider>
+    <SessionProvider>
       <html lang="en">
         <body className={inter.className}>
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
@@ -28,6 +28,6 @@ export default function RootLayout({
           </ThemeProvider>
         </body>
       </html>
-    </ClerkProvider>
+    </SessionProvider>
   );
 }

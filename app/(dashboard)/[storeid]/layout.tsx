@@ -1,12 +1,12 @@
+import Navbar from "@/components/navbar";
 import { authOptions } from "@/lib/authOptions";
 import prismadb from "@/lib/prisma";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import { PropsWithChildren } from "react";
 
-async function RootLayout({ children }: PropsWithChildren) {
+async function DashboardLayout({ children }: PropsWithChildren) {
   const session = await getServerSession(authOptions);
-  console.log("ROOT: ", session);
 
   if (!session) {
     redirect("/api/auth/signin");
@@ -18,10 +18,16 @@ async function RootLayout({ children }: PropsWithChildren) {
     },
   });
 
-  if (store) {
-    return redirect(`/${store.id}`);
+  if (!store) {
+    redirect("/");
   }
-  return <div>{children}</div>;
+  return (
+    <div>
+      <Navbar />
+
+      <div className="max-w-7xl mx-auto mt-5">{children}</div>
+    </div>
+  );
 }
 
-export default RootLayout;
+export default DashboardLayout;

@@ -5,6 +5,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
 import { z } from "zod";
+import Spinner from "../Spinner";
 import { Button } from "../ui/button";
 import {
   Form,
@@ -91,6 +92,7 @@ function StoreModal() {
                 Cancel
               </Button>
               <Button disabled={loading} type="submit" size={"sm"}>
+                {loading && <Spinner />}
                 Continue
               </Button>
             </div>

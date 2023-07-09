@@ -1,13 +1,17 @@
+import { authOptions } from "@/lib/authOptions";
 import prismadb from "@/lib/prisma";
-import { auth } from "@clerk/nextjs";
-import { NextResponse } from "next/server";
+import { getServerSession } from "next-auth";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest, res: NextResponse) {
+  console.log("STORE_CREATE: ");
   try {
-    const { userId } = auth();
+    const session = await getServerSession(authOptions);
+
+    console.log("Session: ", session);
     const { name } = await req.json();
 
-    if (!userId) {
+    if (!session) {
       return new NextResponse("Unauthenticated User", {
         status: 403,
       });
@@ -22,12 +26,15 @@ export async function POST(req: Request) {
     const store = await prismadb.store.create({
       data: {
         name,
-        userId,
+        user: session?.user?.email!,
       },
     });
 
     return NextResponse.json(store);
   } catch (error) {
+    if (error instanceof Error) {
+      console.log(error.message);
+    }
     return new NextResponse("Internal server error", {
       status: 500,
     });

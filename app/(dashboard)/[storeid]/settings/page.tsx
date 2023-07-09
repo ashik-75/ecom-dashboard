@@ -2,11 +2,16 @@ import { authOptions } from "@/lib/authOptions";
 import prismadb from "@/lib/prisma";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
-import { PropsWithChildren } from "react";
+import SettingsForm from "./components/settings-form";
 
-async function RootLayout({ children }: PropsWithChildren) {
+interface SettingsProps {
+  params: {
+    storeid: string;
+  };
+}
+
+async function Settings({ params }: SettingsProps) {
   const session = await getServerSession(authOptions);
-  console.log("ROOT: ", session);
 
   if (!session) {
     redirect("/api/auth/signin");
@@ -14,14 +19,20 @@ async function RootLayout({ children }: PropsWithChildren) {
 
   const store = await prismadb.store.findFirst({
     where: {
-      user: session?.user?.email!,
+      user: session.user?.email!,
+      id: params.storeid,
     },
   });
 
-  if (store) {
-    return redirect(`/${store.id}`);
+  if (!store) {
+    redirect("/");
   }
-  return <div>{children}</div>;
+
+  return (
+    <div>
+      <SettingsForm store={store} />
+    </div>
+  );
 }
 
-export default RootLayout;
+export default Settings;
