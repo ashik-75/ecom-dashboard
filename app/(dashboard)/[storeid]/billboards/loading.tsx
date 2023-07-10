@@ -1,9 +1,9 @@
-import Spinner from "@/components/Spinner";
+import Loader from "@/components/ui/loader";
 
 function Loading() {
   return (
     <div className="flex justify-center items-center h-full w-full">
-      <Spinner />
+      <Loader />
     </div>
   );
 }

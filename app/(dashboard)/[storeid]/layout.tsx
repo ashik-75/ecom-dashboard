@@ -22,10 +22,12 @@ async function DashboardLayout({ children }: PropsWithChildren) {
     redirect("/");
   }
   return (
-    <div>
+    <div className="h-full w-full">
+      {/* @ts-expect-error */}
       <Navbar />
-
-      <div className="max-w-7xl mx-auto mt-5">{children}</div>
+      <div className="max-w-7xl mx-auto h-[100%] w-[100%] mt-10">
+        {children}
+      </div>
     </div>
   );
 }
